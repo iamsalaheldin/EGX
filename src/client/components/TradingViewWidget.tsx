@@ -1,24 +1,32 @@
 import React, { useState } from "react";
+import { EGXData } from "../../server/types.js";
 import { Language, translations } from "../translations.js";
-import { ExternalLink, Info, RefreshCw, BarChart3 } from "lucide-react";
+import { ExternalLink, Info, RefreshCw, BarChart3, TrendingUp } from "lucide-react";
+import { EgxMarketOverview } from "./EgxMarketOverview.js";
 
 interface TradingViewWidgetProps {
   lang: Language;
   isDark: boolean;
+  egxData?: EGXData | null;
 }
 
-type ChartTab = "EGX:EGX30" | "EGX:EGX70EWI" | "EGX:EGX100EWI" | "TVC:GOLD" | "FX_IDC:USDEGP";
-
-export const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({ lang, isDark }) => {
+export const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({
+  lang,
+  isDark,
+  egxData,
+}) => {
   const t = translations[lang];
-  const [activeSymbol, setActiveSymbol] = useState<ChartTab>("EGX:EGX30");
+  const [activeSymbol, setActiveSymbol] = useState<string>("EGX:EGX30");
   const [interval, setInterval] = useState<string>("D");
   const [isIframeLoading, setIsIframeLoading] = useState(true);
 
-  const tabs: { id: ChartTab; label: string; symbolTag: string }[] = [
+  const tabs: { id: string; label: string; symbolTag: string }[] = [
     { id: "EGX:EGX30", label: t.chartEgx30, symbolTag: "EGX30" },
     { id: "EGX:EGX70EWI", label: t.chartEgx70, symbolTag: "EGX70" },
     { id: "EGX:EGX100EWI", label: t.chartEgx100, symbolTag: "EGX100" },
+    { id: "EGX:COMI", label: lang === "ar" ? "CIB البنك التجاري" : "CIB (COMI)", symbolTag: "COMI" },
+    { id: "EGX:TMGH", label: lang === "ar" ? "طلعت مصطفى" : "TMG (TMGH)", symbolTag: "TMGH" },
+    { id: "EGX:ETEL", label: lang === "ar" ? "المصرية للاتصالات" : "Telecom Egypt", symbolTag: "ETEL" },
     { id: "TVC:GOLD", label: t.chartGoldSpot, symbolTag: "XAU/USD" },
     { id: "FX_IDC:USDEGP", label: t.chartUsdEgp, symbolTag: "USD/EGP" },
   ];
@@ -203,6 +211,9 @@ export const TradingViewWidget: React.FC<TradingViewWidgetProps> = ({ lang, isDa
           </div>
         </div>
       </div>
+
+      {/* TradingView Egypt Market Overview, Breadth, Heatmap & Screeners */}
+      <EgxMarketOverview data={egxData} lang={lang} isDark={isDark} />
     </section>
   );
 };

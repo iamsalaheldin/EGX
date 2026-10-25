@@ -115,12 +115,80 @@ export interface EGXIndexInfo {
   changePercent?: number;
 }
 
+export interface EgxStockItem {
+  symbol: string;
+  nameAr: string;
+  nameEn: string;
+  price: number;
+  change: number;
+  changePercent: number;
+  volume?: string;
+  marketCap?: string;
+  peRatio?: number;
+  category?: string;
+  tags?: string[];
+}
+
+export interface EgxMarketBreadth {
+  advancingCount: number;
+  decliningCount: number;
+  unchangedCount: number;
+  advancingPercent: number;
+  decliningPercent: number;
+  above50DayMaPercent: number;
+  above200DayMaPercent: number;
+  newHighsLows: {
+    periodAr: string;
+    periodEn: string;
+    highs: number;
+    lows: number;
+  }[];
+}
+
+export interface EgxDividendEvent {
+  symbol: string;
+  nameAr: string;
+  nameEn: string;
+  dateAr: string;
+  dateEn: string;
+  eventType: "dividend" | "earnings" | "general_assembly";
+  dividendPerShare?: number;
+}
+
+export interface EgxSectorPerformance {
+  id: string;
+  nameAr: string;
+  nameEn: string;
+  oneDay: number;
+  oneWeek: number;
+  oneMonth: number;
+  sixMonths: number;
+  ytd: number;
+  oneYear: number;
+  fiveYears: number;
+  tenYears: number;
+}
+
 export interface EGXData {
   marketStatus: EGXMarketStatus;
   indices: EGXIndexInfo[];
   exchangeName: string;
   exchangeUrl: string;
   tradingViewNotice: string;
+  egx30Current?: {
+    value: number;
+    change: number;
+    changePercent: number;
+    pointChange: number;
+  };
+  marketBreadth: EgxMarketBreadth;
+  mostActive: EgxStockItem[];
+  unusualVolume: EgxStockItem[];
+  highVolatility: EgxStockItem[];
+  topGainers: EgxStockItem[];
+  topLosers: EgxStockItem[];
+  upcomingEvents: EgxDividendEvent[];
+  sectorsHeatmap: EgxSectorPerformance[];
 }
 
 export interface EconomicIndicatorItem {

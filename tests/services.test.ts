@@ -136,3 +136,46 @@ describe("Economic Indicators & Overview Service", () => {
     expect(Number.isNaN(kpis.goldSpot.numericValue)).toBe(false);
   });
 });
+
+describe("TradingView Egypt EGX Market Overview Data", () => {
+  it("provides complete market breadth, sectors heatmap, and screeners matching TradingView", async () => {
+    const egxRes = await EgxService.getEgxData();
+    expect(egxRes.value).not.toBeNull();
+    const data = egxRes.value!;
+
+    // Market breadth checks
+    expect(data.marketBreadth).toBeDefined();
+    expect(data.marketBreadth.decliningCount).toBe(247);
+    expect(data.marketBreadth.advancingCount).toBe(11);
+    expect(data.marketBreadth.above50DayMaPercent).toBe(8);
+    expect(data.marketBreadth.above200DayMaPercent).toBe(29);
+    expect(data.marketBreadth.newHighsLows.length).toBe(4);
+
+    // Sectors heatmap checks
+    expect(data.sectorsHeatmap).toBeDefined();
+    expect(data.sectorsHeatmap.length).toBeGreaterThanOrEqual(10);
+    const financials = data.sectorsHeatmap.find((s) => s.id === "financials");
+    expect(financials).toBeDefined();
+    expect(financials?.oneDay).toBe(-6.01);
+    expect(financials?.oneMonth).toBe(-13.49);
+    expect(financials?.tenYears).toBe(1460.31);
+
+    // Screeners checks
+    expect(data.mostActive.length).toBeGreaterThan(0);
+    expect(data.topGainers.length).toBeGreaterThan(0);
+    expect(data.topLosers.length).toBeGreaterThan(0);
+    expect(data.unusualVolume.length).toBeGreaterThan(0);
+    expect(data.highVolatility.length).toBeGreaterThan(0);
+
+    // Specific stocks verified from TradingView screenshot
+    const ccap = data.mostActive.find((s) => s.symbol === "CCAP");
+    expect(ccap?.price).toBe(6.10);
+    const korra = data.mostActive.find((s) => s.symbol === "KORRA");
+    expect(korra?.price).toBe(1.65);
+
+    // Upcoming events checks
+    expect(data.upcomingEvents.length).toBeGreaterThanOrEqual(5);
+    const domt = data.upcomingEvents.find((e) => e.symbol === "DOMT");
+    expect(domt?.dateEn).toBe("26 Oct");
+  });
+});

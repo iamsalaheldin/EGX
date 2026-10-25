@@ -212,7 +212,7 @@ export default function App() {
         <KpiStrip overview={overview} lang={lang} loading={loading} />
 
         {/* Section 2: Egyptian Stock Exchange (EGX) & Market Charts */}
-        <TradingViewWidget lang={lang} isDark={isDark} />
+        <TradingViewWidget lang={lang} isDark={isDark} egxData={egx?.value} />
 
         {/* Section 3: Foreign Exchange Rates vs EGP & Conversion Calculator */}
         <CurrencySection

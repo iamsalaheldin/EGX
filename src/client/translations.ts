@@ -106,6 +106,37 @@ export interface Translations {
   policySummaryTitle: string;
   officialCbeLink: string;
 
+  // EGX TradingView Egypt Overview
+  egxOverviewTitle: string;
+  egxOverviewSubtitle: string;
+  egxSummaryLabel: string;
+  sectorPerf1M: string;
+  viewAllSectors: string;
+  marketBreadthTitle: string;
+  advancingVsDeclining: string;
+  advancingLabel: string;
+  decliningLabel: string;
+  unchangedLabel: string;
+  aboveMovingAverages: string;
+  newHighsLows: string;
+  viewAllEgxStocks: string;
+  mostActiveTitle: string;
+  viewAllActiveStocks: string;
+  dividendsScheduleTitle: string;
+  viewAllEvents: string;
+  unusualVolumeTitle: string;
+  viewAllUnusual: string;
+  highVolatilityTitle: string;
+  viewAllVolatile: string;
+  topGainersTitle: string;
+  viewAllGainers: string;
+  topLosersTitle: string;
+  viewAllLosers: string;
+  stockGroupsTitle: string;
+  sectorsHeatmapTitle: string;
+  faqTitle: string;
+  faqSubtitle: string;
+
   // Footer & Status
   footerReliabilityTitle: string;
   footerReliabilityText: string;
@@ -215,6 +246,36 @@ export const translations: Record<Language, Translations> = {
     policySummaryTitle: "ملخص موقف السياسة النقدية",
     officialCbeLink: "بوابة الأبحاث الاقتصادية بالبنك المركزي المصري",
 
+    egxOverviewTitle: "الأسهم المصرية - نظرة عامة",
+    egxOverviewSubtitle: "متابعة شاملة لعمق واتساع السوق المصري، حركة القطاعات، أنشط الأسهم والتقويم المالي",
+    egxSummaryLabel: "ملخص السوق",
+    sectorPerf1M: "أداء القطاع: شهر واحد",
+    viewAllSectors: "شاهد جميع القطاعات",
+    marketBreadthTitle: "اتساع السوق",
+    advancingVsDeclining: "الصاعدة والهابطة",
+    advancingLabel: "صاعدة",
+    decliningLabel: "هابطة",
+    unchangedLabel: "دون تغيير",
+    aboveMovingAverages: "أعلى من المتوسطات المتحركة",
+    newHighsLows: "قمم وقيعان جديدة",
+    viewAllEgxStocks: "شاهد كل الأسهم المصرية",
+    mostActiveTitle: "الأكثر نشاطاً",
+    viewAllActiveStocks: "عرض جميع الأسهم النشطة",
+    dividendsScheduleTitle: "جدول العوائد ومواعيدها",
+    viewAllEvents: "مشاهدة جميع الأحداث",
+    unusualVolumeTitle: "زخم غير اعتيادي",
+    viewAllUnusual: "عرض جميع الأسهم ذات حجم تداول غير معتاد",
+    highVolatilityTitle: "الأكثر تذبذباً",
+    viewAllVolatile: "شاهد جميع الأسهم ذات التغيرات الأكبر في الأسعار",
+    topGainersTitle: "الأكثر ارتفاعاً",
+    viewAllGainers: "شاهد جميع الأسهم ذات النمو اليومي الأكبر",
+    topLosersTitle: "الأكثر انخفاضاً",
+    viewAllLosers: "شاهد جميع الأسهم ذات الانخفاض اليومي",
+    stockGroupsTitle: "مجموعات الأسهم",
+    sectorsHeatmapTitle: "خريطة حرارية للقطاعات",
+    faqTitle: "الأسئلة الشائعة حول البورصة والأسهم",
+    faqSubtitle: "دليل معرفي شامل ومبسط للمستثمر في البورصة المصرية EGX",
+
     footerReliabilityTitle: "ميثاق دقة البيانات والشفافية",
     footerReliabilityText: "يلتزم تطبيق 'نبض الأسواق المصرية' بالفصل الصارم بين البيانات اللحظية والبيانات التقديرية والمتأخرة. لا يتم استخدام أي قيم مصطنعة، ويتم عرض توقيت الرصد الدقيق لكل مؤشر مع روابط المصادر الرسمية.",
     sourcesTitle: "المصادر المعتمدة",
@@ -320,6 +381,36 @@ export const translations: Record<Language, Translations> = {
     nextMeetingLabel: "Next Monetary Policy Committee Meeting",
     policySummaryTitle: "Monetary Policy Assessment",
     officialCbeLink: "Central Bank of Egypt Economic Portal",
+
+    egxOverviewTitle: "Egyptian Stocks - Market Overview",
+    egxOverviewSubtitle: "Comprehensive Egyptian stock market breadth, sector heatmap, high-volume movers & corporate actions calendar",
+    egxSummaryLabel: "Market Summary",
+    sectorPerf1M: "Sector Performance: 1 Month",
+    viewAllSectors: "View All Sectors",
+    marketBreadthTitle: "Market Breadth",
+    advancingVsDeclining: "Advancing vs Declining",
+    advancingLabel: "Advancing",
+    decliningLabel: "Declining",
+    unchangedLabel: "Unchanged",
+    aboveMovingAverages: "Above Moving Averages",
+    newHighsLows: "New Highs & Lows",
+    viewAllEgxStocks: "View All Egyptian Stocks",
+    mostActiveTitle: "Most Active",
+    viewAllActiveStocks: "View All Active Stocks",
+    dividendsScheduleTitle: "Dividends & Earnings Calendar",
+    viewAllEvents: "View All Events",
+    unusualVolumeTitle: "Unusual Volume",
+    viewAllUnusual: "View Unusual Volume Stocks",
+    highVolatilityTitle: "High Volatility",
+    viewAllVolatile: "View High Volatility Stocks",
+    topGainersTitle: "Top Gainers",
+    viewAllGainers: "View All Top Gainers",
+    topLosersTitle: "Top Losers",
+    viewAllLosers: "View All Top Losers",
+    stockGroupsTitle: "Stock Groups",
+    sectorsHeatmapTitle: "Sectors Heatmap",
+    faqTitle: "Frequently Asked Questions",
+    faqSubtitle: "Essential knowledge base and investor guide for trading in the Egyptian Exchange (EGX)",
 
     footerReliabilityTitle: "Data Reliability & Transparency Charter",
     footerReliabilityText: "Egypt Markets Pulse strictly separates live feeds from delayed, estimated, and cached indicators. No artificial values are fabricated. Observation timestamps and official provider references are published for every data point.",
