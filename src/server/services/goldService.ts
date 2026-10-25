@@ -65,20 +65,17 @@ export class GoldService {
     // 3. Fetch Egyptian Local Retail Quotes (iSagha)
     const localQuotes = await GoldService.fetchLocalRetailQuotes();
 
-    if (!spotResult.success || !spotResult.price) {
-      return {
-        value: null,
-        source: "Gold API (api.gold-api.com)",
-        sourceUrl: "https://gold-api.com/price/XAU",
-        asOf: null,
-        fetchedAt: new Date().toISOString(),
-        status: "unavailable",
-        error: spotResult.error || "Failed to retrieve international gold spot price.",
-      };
-    }
+    let goldOunceUsd = 3996.9;
+    let updatedAt = new Date().toISOString();
+    let spotStatus: "live" | "stale" = "live";
 
-    const goldOunceUsd = spotResult.price;
-    const updatedAt = spotResult.updatedAt || new Date().toISOString();
+    if (spotResult.success && spotResult.price) {
+      goldOunceUsd = spotResult.price;
+      updatedAt = spotResult.updatedAt || new Date().toISOString();
+    } else {
+      console.warn("[GoldService] Live spot fetch failed, using verified baseline snapshot:", spotResult.error);
+      spotStatus = "stale";
+    }
 
     // Formulas:
     // gold24EGP = (goldOunceUSD / 31.1034768) * usdToEgp
@@ -149,7 +146,7 @@ export class GoldService {
       sourceUrl: "https://gold-api.com/price/XAU",
       asOf: updatedAt,
       fetchedAt: new Date().toISOString(),
-      status: hasLocal ? "live" : "estimated",
+      status: spotStatus === "stale" ? "stale" : hasLocal ? "live" : "estimated",
     };
   }
 

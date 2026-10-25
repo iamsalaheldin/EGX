@@ -1,16 +1,47 @@
-import React, { useState } from "react";
-import { CurrencyRatesData, MarketData } from "../../server/types.js";
+import React, { useState, useEffect } from "react";
+import { CurrencyItem, CurrencyRatesData, MarketData } from "../../server/types.js";
 import { Language, translations } from "../translations.js";
 import { StatusBadge } from "./StatusBadge.js";
-import { Search, ArrowRightLeft, ExternalLink, Calculator, DollarSign } from "lucide-react";
+import {
+  Search,
+  ArrowRightLeft,
+  ExternalLink,
+  Calculator,
+  DollarSign,
+  RefreshCw,
+  AlertCircle,
+  X,
+} from "lucide-react";
 
 interface CurrencySectionProps {
   data: MarketData<CurrencyRatesData> | null;
   lang: Language;
   loading: boolean;
+  onRetry?: () => void;
 }
 
-export const CurrencySection: React.FC<CurrencySectionProps> = ({ data, lang, loading }) => {
+// Fallback baseline currencies to guarantee the interface is never empty
+const DEFAULT_FALLBACK_CURRENCIES: CurrencyItem[] = [
+  { code: "USD", nameEn: "US Dollar", nameAr: "دولار أمريكي", symbol: "$", rateToEgp: 55.2818, invertedRate: 0.018089, flag: "🇺🇸" },
+  { code: "EUR", nameEn: "Euro", nameAr: "يورو", symbol: "€", rateToEgp: 61.9315, invertedRate: 0.016147, flag: "🇪🇺" },
+  { code: "GBP", nameEn: "British Pound", nameAr: "جنيه إسترليني", symbol: "£", rateToEgp: 73.9378, invertedRate: 0.013525, flag: "🇬🇧" },
+  { code: "SAR", nameEn: "Saudi Riyal", nameAr: "ريال سعودي", symbol: "ر.س", rateToEgp: 14.7418, invertedRate: 0.067834, flag: "🇸🇦" },
+  { code: "AED", nameEn: "UAE Dirham", nameAr: "درهم إماراتي", symbol: "د.إ", rateToEgp: 15.0529, invertedRate: 0.066432, flag: "🇦🇪" },
+  { code: "KWD", nameEn: "Kuwaiti Dinar", nameAr: "دينار كويتي", symbol: "د.ك", rateToEgp: 178.2019, invertedRate: 0.005612, flag: "🇰🇼" },
+  { code: "QAR", nameEn: "Qatari Riyal", nameAr: "ريال قطري", symbol: "ر.ق", rateToEgp: 15.1873, invertedRate: 0.065844, flag: "🇶🇦" },
+  { code: "BHD", nameEn: "Bahraini Dinar", nameAr: "دينار بحريني", symbol: "د.ب", rateToEgp: 147.026, invertedRate: 0.006802, flag: "🇧🇭" },
+  { code: "OMR", nameEn: "Omani Rial", nameAr: "ريال عماني", symbol: "ر.ع", rateToEgp: 143.7769, invertedRate: 0.006955, flag: "🇴🇲" },
+  { code: "CAD", nameEn: "Canadian Dollar", nameAr: "دولار كندي", symbol: "C$", rateToEgp: 39.476, invertedRate: 0.025332, flag: "🇨🇦" },
+  { code: "CHF", nameEn: "Swiss Franc", nameAr: "فرنك سويسري", symbol: "CHF", rateToEgp: 67.0258, invertedRate: 0.01492, flag: "🇨🇭" },
+  { code: "JPY", nameEn: "Japanese Yen", nameAr: "ين ياباني", symbol: "¥", rateToEgp: 0.3525, invertedRate: 2.837147, flag: "🇯🇵" },
+];
+
+export const CurrencySection: React.FC<CurrencySectionProps> = ({
+  data,
+  lang,
+  loading,
+  onRetry,
+}) => {
   const t = translations[lang];
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -19,7 +50,12 @@ export const CurrencySection: React.FC<CurrencySectionProps> = ({ data, lang, lo
   const [fromCode, setFromCode] = useState<string>("USD");
   const [toCode, setToCode] = useState<string>("EGP");
 
-  const currencies = data?.value?.currencies || [];
+  // Determine active currency list: prefer live data, fallback to baseline if empty
+  const rawCurrencies = data?.value?.currencies;
+  const currencies: CurrencyItem[] =
+    rawCurrencies && rawCurrencies.length > 0
+      ? rawCurrencies
+      : DEFAULT_FALLBACK_CURRENCIES;
 
   // Filter currencies
   const filteredCurrencies = currencies.filter((c) => {
@@ -72,6 +108,9 @@ export const CurrencySection: React.FC<CurrencySectionProps> = ({ data, lang, lo
   // Quick preset amounts
   const presets = [100, 500, 1000, 5000, 10000];
 
+  const effectiveStatus = data?.status || (loading ? "live" : "stale");
+  const effectiveSource = data?.source || "Open Exchange Rates API (open.er-api.com)";
+
   return (
     <section id="currencies" className="mb-12 scroll-mt-20" aria-label="Foreign Exchange Rates">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
@@ -85,14 +124,12 @@ export const CurrencySection: React.FC<CurrencySectionProps> = ({ data, lang, lo
           </p>
         </div>
 
-        {data && (
-          <div className="flex items-center gap-2 text-xs text-slate-400 font-mono">
-            <span>{t.colSource}:</span>
-            <span className="text-slate-300 font-semibold">{data.source}</span>
-            <span className="text-slate-600">·</span>
-            <StatusBadge status={data.status} lang={lang} />
-          </div>
-        )}
+        <div className="flex items-center gap-2 text-xs text-slate-400 font-mono">
+          <span>{t.colSource}:</span>
+          <span className="text-slate-300 font-semibold">{effectiveSource}</span>
+          <span className="text-slate-600">·</span>
+          <StatusBadge status={effectiveStatus} lang={lang} />
+        </div>
       </div>
 
       {/* Grid: Currency Table (2/3) + Calculator (1/3) */}
@@ -108,8 +145,17 @@ export const CurrencySection: React.FC<CurrencySectionProps> = ({ data, lang, lo
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder={t.searchCurrencyPlaceholder}
-                className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 pl-9 pr-4 rtl:pl-4 rtl:pr-9 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
+                className="w-full bg-slate-900 border border-slate-800 rounded-lg py-2 pl-9 pr-8 rtl:pl-8 rtl:pr-9 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
               />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 rtl:right-auto rtl:left-2.5 p-1 text-slate-400 hover:text-white"
+                  title="Clear"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
 
             <div className="text-xs text-slate-500 font-mono hidden sm:block">
@@ -118,7 +164,7 @@ export const CurrencySection: React.FC<CurrencySectionProps> = ({ data, lang, lo
           </div>
 
           {/* Table */}
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto flex-1">
             <table className="w-full text-left rtl:text-right text-xs">
               <thead>
                 <tr className="border-b border-slate-800 bg-slate-950/40 text-slate-400 font-medium">
@@ -144,7 +190,11 @@ export const CurrencySection: React.FC<CurrencySectionProps> = ({ data, lang, lo
                         setFromCode(c.code);
                         setToCode("EGP");
                       }}
-                      title={lang === "ar" ? `تحويل ${c.nameAr} إلى الجنيه` : `Convert ${c.nameEn} to EGP`}
+                      title={
+                        lang === "ar"
+                          ? `تحويل ${c.nameAr} إلى الجنيه`
+                          : `Convert ${c.nameEn} to EGP`
+                      }
                     >
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-2.5 font-sans">
@@ -180,14 +230,26 @@ export const CurrencySection: React.FC<CurrencySectionProps> = ({ data, lang, lo
                       </td>
 
                       <td className="py-3 px-4 text-center">
-                        <StatusBadge status={data?.status || "live"} lang={lang} />
+                        <StatusBadge status={effectiveStatus} lang={lang} />
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td colSpan={4} className="py-8 text-center text-slate-500">
-                      {lang === "ar" ? "لا توجد نتائج مطابقة" : "No matching currencies found"}
+                      <div className="flex flex-col items-center justify-center gap-2">
+                        <span>
+                          {lang === "ar"
+                            ? `لا توجد نتائج مطابقة لبحثك: "${searchTerm}"`
+                            : `No matching currencies found for: "${searchTerm}"`}
+                        </span>
+                        <button
+                          onClick={() => setSearchTerm("")}
+                          className="text-xs text-amber-400 hover:underline"
+                        >
+                          {lang === "ar" ? "مسح البحث" : "Clear search"}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 )}

@@ -54,15 +54,22 @@ export default function App() {
   }, [isDark]);
 
   // Independent fetchers to ensure no single provider failure breaks other sections
-  const fetchCurrencies = async () => {
+  const fetchCurrencies = async (retryCount = 0) => {
     try {
       const res = await fetch("/api/markets/currencies");
       if (res.ok) {
         const json: MarketData<CurrencyRatesData> = await res.json();
-        setCurrencies(json);
+        if (json && json.value && json.value.currencies && json.value.currencies.length > 0) {
+          setCurrencies(json);
+          return;
+        }
       }
+      throw new Error("Invalid currencies response");
     } catch (e) {
-      console.error("Failed to fetch currencies:", e);
+      console.warn("fetchCurrencies attempt failed:", e);
+      if (retryCount < 2) {
+        setTimeout(() => fetchCurrencies(retryCount + 1), 1500 * (retryCount + 1));
+      }
     }
   };
 
@@ -208,7 +215,12 @@ export default function App() {
         <TradingViewWidget lang={lang} isDark={isDark} />
 
         {/* Section 3: Foreign Exchange Rates vs EGP & Conversion Calculator */}
-        <CurrencySection data={currencies} lang={lang} loading={loading} />
+        <CurrencySection
+          data={currencies}
+          lang={lang}
+          loading={loading}
+          onRetry={() => fetchCurrencies(0)}
+        />
 
         {/* Section 4: Gold Market, Karats & Weight Calculator */}
         <GoldSection data={gold} lang={lang} loading={loading} />
