@@ -1,0 +1,6 @@
+{
+  "name": "Egypt Markets Pulse",
+  "description": "Personal financial dashboard monitoring the Egyptian economy, EGX stock indices, foreign exchange rates, local & international gold prices, and CBE indicators.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
