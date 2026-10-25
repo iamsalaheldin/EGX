@@ -19,11 +19,15 @@ export interface CurrencyItem {
   nameEn: string;
   nameAr: string;
   symbol: string;
-  rateToEgp: number;
+  rateToEgp: number; // Google Finance live market rate
   invertedRate: number; // 1 EGP = ? currency
   change24h?: number;
   change24hPercent?: number;
   flag: string;
+  // Official Central Bank of Egypt (CBE) rates
+  cbeBuyRate?: number;
+  cbeSellRate?: number;
+  cbeAvgRate?: number;
 }
 
 export interface CurrencyRatesData {
@@ -31,6 +35,24 @@ export interface CurrencyRatesData {
   usdToEgp: number;
   currencies: CurrencyItem[];
   supportedCodes: string[];
+  sources: {
+    google: {
+      nameEn: string;
+      nameAr: string;
+      url: string;
+      asOf: string;
+      status: DataStatus;
+    };
+    cbe: {
+      nameEn: string;
+      nameAr: string;
+      url: string;
+      asOf: string;
+      status: DataStatus;
+      noteEn: string;
+      noteAr: string;
+    };
+  };
 }
 
 export interface GoldKaratDetail {

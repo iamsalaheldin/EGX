@@ -51,7 +51,17 @@ export interface Translations {
   colRateToEgp: string;
   colInvertedRate: string;
   colStatus: string;
-  colSource: string;
+  sourceGoogle: string;
+  sourceCbe: string;
+  sourceCompare: string;
+  colGoogleRate: string;
+  colCbeBuy: string;
+  colCbeSell: string;
+  cbeNoticeText: string;
+  currencyChartTitle: string;
+  currencyChartSubtitle: string;
+  toggleChartShow: string;
+  toggleChartHide: string;
   calculatorTitle: string;
   calculatorSubtitle: string;
   amountLabel: string;
@@ -152,7 +162,17 @@ export const translations: Record<Language, Translations> = {
     colRateToEgp: "السعر بالجنيه (EGP)",
     colInvertedRate: "الجنيه الواحد يعادل",
     colStatus: "حالة البيانات",
-    colSource: "المصدر",
+    sourceGoogle: "جوجل فاينانس (سعر السوق المباشر)",
+    sourceCbe: "البنك المركزي المصري (الأسعار الرسمية)",
+    sourceCompare: "مقارنة المصدرين معاً",
+    colGoogleRate: "سعر جوجل (EGP)",
+    colCbeBuy: "شراء المركزي",
+    colCbeSell: "بيع المركزي",
+    cbeNoticeText: "نشرة أسعار الصرف الرسمية المعلنة من البنك المركزي المصري بالبنوك العاملة في مصر.",
+    currencyChartTitle: "مخطط التداول المباشر للعملات (TradingView)",
+    currencyChartSubtitle: "تحليل حركة سعر صرف العملات مقابل الجنيه المصري لحظياً من خلال منصة TradingView",
+    toggleChartShow: "عرض مخطط TradingView",
+    toggleChartHide: "إخفاء المخطط",
     calculatorTitle: "حاسبة تحويل العملات",
     calculatorSubtitle: "تحويل فوري ودقيق بين الجنيه المصري والعملات العالمية",
     amountLabel: "المبلغ",
@@ -248,7 +268,17 @@ export const translations: Record<Language, Translations> = {
     colRateToEgp: "Rate in EGP",
     colInvertedRate: "1 EGP Equals",
     colStatus: "Data Status",
-    colSource: "Source",
+    sourceGoogle: "Google Finance (Live Market)",
+    sourceCbe: "Central Bank of Egypt (Official)",
+    sourceCompare: "Compare Both Sources",
+    colGoogleRate: "Google Rate (EGP)",
+    colCbeBuy: "CBE Buy",
+    colCbeSell: "CBE Sell",
+    cbeNoticeText: "Official commercial banking exchange rates published by the Central Bank of Egypt.",
+    currencyChartTitle: "TradingView Currency Exchange Chart",
+    currencyChartSubtitle: "Real-time technical analysis and candlestick charts for foreign currencies vs EGP powered by TradingView",
+    toggleChartShow: "Show TradingView Chart",
+    toggleChartHide: "Hide Chart",
     calculatorTitle: "Currency Conversion Calculator",
     calculatorSubtitle: "Instant, precision calculation between EGP and major global currencies",
     amountLabel: "Amount",

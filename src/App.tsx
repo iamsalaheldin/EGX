@@ -219,6 +219,7 @@ export default function App() {
           data={currencies}
           lang={lang}
           loading={loading}
+          isDark={isDark}
           onRetry={() => fetchCurrencies(0)}
         />
 
